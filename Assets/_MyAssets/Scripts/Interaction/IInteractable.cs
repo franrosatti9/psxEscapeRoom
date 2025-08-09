@@ -7,11 +7,8 @@ public interface IInteractable
     bool Interact();
 
     bool CanInteract();
-    void Highlight();
-    void StopHighlight();
-    string GetInteractText();
+    public bool PlayerHasRequiredItem();
     bool Interacted();
-    bool Highlighted();
 
     public void SetInteractable(bool isEnabled);
 

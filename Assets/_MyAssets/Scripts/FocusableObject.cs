@@ -40,19 +40,7 @@ public class FocusableObject : InteractionBase, IFocusable
     {
         return _interactable;
     }
-
-    public override void Highlight()
-    {
-        //throw new System.NotImplementedException();
-    }
-
-    public override void StopHighlight()
-    {
-        //throw new System.NotImplementedException();
-    }
     
-
-
     public void Focus()
     {
         Debug.Log("Interacted");

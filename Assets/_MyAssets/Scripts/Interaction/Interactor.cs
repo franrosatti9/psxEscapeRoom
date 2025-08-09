@@ -14,6 +14,7 @@ public class Interactor : MonoBehaviour
     private float _interactablesFound;
     public bool interactionEnabled = true;
     private bool _canInteract;
+    private bool _itemRequired;
     [SerializeField] Camera _cam;
     [SerializeField] private float interactRange;
     [SerializeField] private float interactRadius;
@@ -22,6 +23,7 @@ public class Interactor : MonoBehaviour
     
     [SerializeField] private Image crosshair;
     [SerializeField] private Sprite interactOnSprite;
+    [SerializeField] private Sprite interactItemRequiredSprite;
     [SerializeField] private Sprite interactOffSprite;
     
     private PlayerInventory _inventory;
@@ -46,7 +48,7 @@ public class Interactor : MonoBehaviour
             
         }
 
-        crosshair.sprite = _canInteract ? interactOnSprite : interactOffSprite;
+        HandleCrosshairSprite();
         
         if(!interactionEnabled) return;
         
@@ -84,30 +86,40 @@ public class Interactor : MonoBehaviour
             {
                 _objectToInteract = hit.collider.gameObject.GetComponent<IInteractable>();
 
-                if (_objectToInteract != _lastObjectToInteract) _lastObjectToInteract?.StopHighlight();
+                
+                // TODO: Delete highlight if not necessary
 
                 if (_objectToInteract != null)
                 {
                     if (_objectToInteract.CanInteract())
                     {
-                        _lastObjectToInteract = _objectToInteract;
-                        _objectToInteract.Highlight();
-                        _canInteract = true;
+                        if (_objectToInteract.PlayerHasRequiredItem())
+                        {
+                            _itemRequired = false;
+                            _canInteract = true;
+                        }
+                        else
+                        {
+                            print("Requires item!");
+                            _itemRequired = true;
+                            _canInteract = false;
+                        }
+                        
                     }
                     else
                     {
                         _canInteract = false;
-                        _objectToInteract.StopHighlight();
                     }
                 }
-                else _canInteract = false;
+                else
+                {
+                    _canInteract = false; _itemRequired = false;
+                }
 
             }
             else
             {
-                _lastObjectToInteract?.StopHighlight();
-                _lastObjectToInteract = null;
-                _canInteract = false;
+                _canInteract = false; _itemRequired = false;
             }
         }
         else
@@ -119,33 +131,45 @@ public class Interactor : MonoBehaviour
                     QueryTriggerInteraction.Collide))
             {
                 _objectToInteract = hit.collider.gameObject.GetComponent<IInteractable>();
-
-                if (_objectToInteract != _lastObjectToInteract) _lastObjectToInteract?.StopHighlight();
-
+                
                 if (_objectToInteract != null)
                 {
                     if (_objectToInteract.CanInteract())
                     {
-                        _lastObjectToInteract = _objectToInteract;
-                        _objectToInteract.Highlight();
-                        _canInteract = true;
+                        if (_objectToInteract.PlayerHasRequiredItem())
+                        {
+                            _itemRequired = false;
+                            _canInteract = true;
+                        }
+                        else
+                        {
+                            _itemRequired = true;
+                            _canInteract = false;
+                        }
                     }
                     else
                     {
-                        _canInteract = false;
-                        _objectToInteract.StopHighlight();
+                        _canInteract = false; _itemRequired = false;
                     }
                 }
-                else _canInteract = false;
+                else
+                {
+                    _canInteract = false; _itemRequired = false;
+                }
 
             }
             else
             {
-                _lastObjectToInteract?.StopHighlight();
-                _lastObjectToInteract = null;
-                _canInteract = false;
+                _canInteract = false; _itemRequired = false;
             }
         }
+    }
+
+    void HandleCrosshairSprite()
+    {
+        if (_itemRequired) crosshair.sprite = interactItemRequiredSprite;
+        else  crosshair.sprite = _canInteract ? interactOnSprite : interactOffSprite;
+       
     }
 
     public IInteractable GetInteractable()
@@ -157,6 +181,7 @@ public class Interactor : MonoBehaviour
     {
         interactionEnabled = isEnabled;
         if (isEnabled == false) _canInteract = false;
+        _itemRequired = false;
     }
 
     public void SetFpsInteractionMode(bool fpsModeEnabled)

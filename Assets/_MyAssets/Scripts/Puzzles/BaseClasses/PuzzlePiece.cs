@@ -23,6 +23,8 @@ public abstract class PuzzlePiece : InteractionBase
         if(puzzleParent.CooldownAllPieces) puzzleParent.StartPiecesCooldown();
         else StartCooldown();
         
+        PlayInteractionEffects();
+        
         OnInteract();
         return true;
 

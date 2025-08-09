@@ -57,7 +57,7 @@ public class UIManager : MonoBehaviour
     public void ShowInteraction(IInteractable interactable)
     {
         interactionUIObject.SetActive(true);
-        interactionText.text = interactable.GetInteractText();
+        //interactionText.text = interactable.GetInteractText();
     }
 
     public void HideInteraction()

@@ -19,6 +19,7 @@ public class PuzzlePieceSequence : PuzzlePiece
         parent.AddToSequence(id);
         
         // TODO: Maybe change anim to other class that handles generic animations
+        
         anim.SetBool("Interacted", true);
         
     }

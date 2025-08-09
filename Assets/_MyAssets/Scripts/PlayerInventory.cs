@@ -26,6 +26,14 @@ public class PlayerInventory : MonoBehaviour
         
     }
 
+    private void OnCollisionEnter(Collision other) {
+        
+    }
+
+    private void OnTriggerEnter(Collider other) {
+        
+    }
+
     public bool HasItem(ItemDataSO simpleItem)
     {
         // Si tiene el item o no se pide ninguno, se devuelve true

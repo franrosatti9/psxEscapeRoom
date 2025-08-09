@@ -79,6 +79,7 @@ public class GameManager : MonoBehaviour
                 Cursor.lockState = CursorLockMode.Locked;
                 break;
             case GameState.ObjectFocused:
+                // MAKE PLAYER MESH INVISIBLE
                 _player.EnableInput(false);
                 _player._controller.enabled = false;
                 Cursor.lockState = CursorLockMode.None;

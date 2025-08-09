@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class InteractAnim : InteractionBase, IInteractable
@@ -21,6 +22,7 @@ public class InteractAnim : InteractionBase, IInteractable
 
     public override bool Interact()
     {
+        // TODO: IMPROVE INTERACT ONCE
         if (!_interactable || (_interacted && interactOnce)) return false;
 
         if (interactOnce)
@@ -67,6 +69,6 @@ public class InteractAnim : InteractionBase, IInteractable
 
     public override bool CanInteract()
     {
-        return _interactable &&  PlayerHasRequiredItem();
+        return _interactable;
     }
 }
